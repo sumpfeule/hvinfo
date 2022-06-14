@@ -1,4 +1,3 @@
-use serde_json;
 use std::{collections::HashMap, io::Read, process::exit};
 
 const HVPATH: &str = "/var/lib/hyperv/.kvp_pool_3";
@@ -10,7 +9,13 @@ const HV_KVP_EXCHANGE_MAX_KEY_SIZE: usize = 512;
 const HV_KVP_EXCHANGE_MAX_VALUE_SIZE: usize = 2048;
 
 fn main() {
-    let f = std::fs::File::open(HVPATH).unwrap();
+    let f = match std::fs::File::open(HVPATH) {
+        Ok(f) => f,
+        Err(_e) => {
+            println!("{{}}");
+            exit(0);
+        }
+    };
     let mut reader = std::io::BufReader::new(f);
     let mut read_bytes = 0;
 
